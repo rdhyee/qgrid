@@ -165,13 +165,19 @@ define([path + "widgets/js/widget", path + "widgets/js/manager"], function(widge
                     return;
                 }
                 var data = sgrid.getData().getItem(cell.row);
-                grid.data_view.deleteItem(data.id);
-                msg = {'type': 'remove_row', 'row': cell.row, 'id': data.id};
+                grid.data_view.deleteItem(data.slick_grid_id);
+                msg = {'type': 'remove_row', 'row': cell.row, 'id': data.Index};
                 this.updateSize();
                 this.send(msg);
 
             } else if (msg.type === 'add_row') {
                 var dd = sgrid.getData();
+                // need to add slick_grid_id
+                // generate a guid http://stackoverflow.com/a/2117523/7782
+                msg['slick_grid_id'] = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = crypto.getRandomValues(new Uint8Array(1))[0]%16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return v.toString(16);
+});
                 dd.addItem(msg);
                 dd.refresh();
                 this.updateSize();
