@@ -116,6 +116,7 @@ define([path + "widgets/js/widget", path + "widgets/js/manager"], function(widge
             var df = JSON.parse(this.model.get('_df_json'));
             var column_types = JSON.parse(this.model.get('_column_types_json'));
             var options = this.model.get('grid_options');
+            var index_name = this.model.get('_index_name');
             grid = new this.dgrid.QGrid(this.tableDiv, df, column_types);
             grid.initialize_slick_grid(options);
 
@@ -148,7 +149,12 @@ define([path + "widgets/js/widget", path + "widgets/js/manager"], function(widge
 
             sgrid.onSelectedRowsChanged.subscribe(function(e, args) {
                 var rows = args.rows;
-                var msg = {'rows': args.rows, 'type': 'selection_change'};
+                var dv = grid.slick_grid.getData();
+                // for now, return both indexes and items -- might get rid of one
+                var items = $.map(rows, function(val,i){return dv.getItem(val)});
+                var indexes = $.map(rows, function(val,i){return dv.getItem(val)[index_name]});
+                var msg = {'rows': args.rows, 'items': items, 'indexes':indexes,
+                     'type': 'selection_change'};
                 that.send(msg);
             });
         },

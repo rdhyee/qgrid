@@ -218,7 +218,7 @@ class QGridWidget(widgets.DOMWidget):
     _view_name = Unicode('QGridView', sync=True)
     _df_json = Unicode('', sync=True)
     _column_types_json = Unicode('', sync=True)
-    _index_name = Unicode('')
+    _index_name = Unicode('', sync=True)
     _initialized = Bool(False)
     _dirty = Bool(False)
     _cdn_base_url = Unicode(LOCAL_URL, sync=True)
